@@ -126,7 +126,7 @@ spotless {
 }
 
 group = "com.github.tjni.captainhook"
-version = "0.1.1"
+version = "0.1.2"
 
 publishing {
     publications {
