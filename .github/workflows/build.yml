@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest]
         java: [8, 9, 13]
 
     runs-on: ${{ matrix.os }}
@@ -30,12 +30,12 @@ jobs:
       
     - name: Build
       run: ./gradlew build
-      
+
     - name: Publish
+      if: matrix.os == 'macos-latest' && matrix.java == 13
       run: ./gradlew publish
       env:
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.signingKey }}
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.signingPassword }}
         ORG_GRADLE_PROJECT_nexusUsername: ${{ secrets.nexusUsername }}
         ORG_GRADLE_PROJECT_nexusPassword: ${{ secrets.nexusPassword }}
-      
