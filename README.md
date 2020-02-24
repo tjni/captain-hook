@@ -71,7 +71,7 @@ The `staging` modifier is a signal to Captain Hook to snapshot the state of your
 
 Captain Hook will leave untracked files alone, including changes that are made by the pre-commit hook. For example, the `spotlessApply` task from the [Spotless plugin](https://github.com/diffplug/spotless/tree/master/plugin-gradle) will run on every file and can lead to modifications to the untracked files.
 
-To address this, Captain Hook will create a Gradle project property on the root project called <b>staging</b>, with type <i>List&lt;Path&gt;</i>, that contains the absolute paths to each file in the staging area. It's possible to create wrapper tasks that configure the underlying tasks to pay attention only to these files.
+To address this, the plugin will create a Gradle project property on the root project called <b>staging</b>, with type <i>List&lt;Path&gt;</i>, that contains the absolute paths to each file in the staging area. It's possible to create wrapper tasks that configure the underlying tasks to pay attention only to these files.
 
 ## Attribution
 
