@@ -35,6 +35,7 @@ jobs:
       if: matrix.os == 'macos-latest' && matrix.java == 13
       run: ./gradlew publish
       env:
+        ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.signingKeyId }}
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.signingKey }}
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.signingPassword }}
         ORG_GRADLE_PROJECT_nexusUsername: ${{ secrets.nexusUsername }}
