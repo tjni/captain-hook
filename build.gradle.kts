@@ -35,20 +35,26 @@ configurations {
 }
 
 dependencies {
-    annotationProcessor("com.google.dagger:dagger-compiler:2.25.3")
-    annotationProcessor("org.immutables:value-processor:2.8.2")
-    implementation("com.google.dagger:dagger:2.25.3")
-    implementation("javax.inject:javax.inject:1")
-    implementation("one.util:streamex:0.7.2")
-    implementation("org.freemarker:freemarker:2.3.29")
-    implementation("org.immutables:value:2.8.2")
-    testImplementation("org.assertj:assertj-core:3.15.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.6.0")
-    testImplementation("org.mockito:mockito-core:3.2.4")
-    testImplementation("org.mockito:mockito-junit-jupiter:3.2.4")
-    "functionalTestImplementation"("one.util:streamex:0.7.2")
-    "functionalTestImplementation"("org.assertj:assertj-core:3.15.0")
-    "functionalTestImplementation"("org.junit.jupiter:junit-jupiter:5.6.0")
+    apply(from = "dependencies.gradle.kts")
+    val dependencies: List<String> by project.extra
+    val map = dependencies.associateBy {
+        it.substringBeforeLast(':')
+    }
+
+    annotationProcessor(map.getValue("com.google.dagger:dagger-compiler"))
+    annotationProcessor(map.getValue("org.immutables:value-processor"))
+    implementation(map.getValue("com.google.dagger:dagger"))
+    implementation(map.getValue("javax.inject:javax.inject"))
+    implementation(map.getValue("one.util:streamex"))
+    implementation(map.getValue("org.freemarker:freemarker"))
+    implementation(map.getValue("org.immutables:value"))
+    testImplementation(map.getValue("org.assertj:assertj-core"))
+    testImplementation(map.getValue("org.junit.jupiter:junit-jupiter"))
+    testImplementation(map.getValue("org.mockito:mockito-core"))
+    testImplementation(map.getValue("org.mockito:mockito-junit-jupiter"))
+    "functionalTestImplementation"(map.getValue("one.util:streamex"))
+    "functionalTestImplementation"(map.getValue("org.assertj:assertj-core"))
+    "functionalTestImplementation"(map.getValue("org.junit.jupiter:junit-jupiter"))
 }
 
 java {
