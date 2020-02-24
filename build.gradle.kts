@@ -138,13 +138,16 @@ publishing {
             }
 
             credentials {
-                username = properties["nexusUsername"] as String
-                password = properties["nexusPassword"] as String
+                username = properties["nexusUsername"] as String?
+                password = properties["nexusPassword"] as String?
             }
         }
     }
 }
 
 signing {
+    @Suppress("UnstableApiUsage")
+    useInMemoryPgpKeys(properties["signingKey"] as String?, properties["signingPassword"] as String?)
+
     sign(publishing.publications["mavenJava"])
 }

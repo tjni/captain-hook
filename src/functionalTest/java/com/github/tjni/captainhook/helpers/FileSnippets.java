@@ -7,7 +7,7 @@ public final class FileSnippets {
   public static final String APPLY_PLUGIN_SNIPPET =
       mergeLines(
           "plugins {                             ",
-          "  id(\"com.github.tjni.captain-hook\")",
+          "  id(\"com.github.tjni.captainhook\") ",
           "}                                     ");
 
   private static final String EMPTY_LINE = "";
