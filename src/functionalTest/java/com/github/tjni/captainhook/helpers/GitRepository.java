@@ -84,6 +84,14 @@ public class GitRepository {
     assumeThatCode(() -> gitHelper.git("init"))
         .as("Running \"git init\"")
         .doesNotThrowAnyException();
+
+    assumeThatCode(() -> gitHelper.git("config", "user.name", "tester"))
+        .as("Running \"git config user.name\"")
+        .doesNotThrowAnyException();
+
+    assumeThatCode(() -> gitHelper.git("config", "user.email", "tester@example.com"))
+        .as("Running \"git config user.email\"")
+        .doesNotThrowAnyException();
   }
 
   private void writeLines(String filePath, String... paddedLines) {
