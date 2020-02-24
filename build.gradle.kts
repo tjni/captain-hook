@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     `java-gradle-plugin`
     `maven-publish`
@@ -91,6 +94,14 @@ tasks.named("check") {
 tasks.withType(Test::class) {
     useJUnitPlatform()
     systemProperty("java.io.tmpdir", temporaryDir)
+
+    testLogging {
+        events(TestLogEvent.FAILED)
+        exceptionFormat = TestExceptionFormat.FULL
+        showCauses = true
+        showExceptions = true
+        showStackTraces = true
+    }
 }
 
 spotless {
@@ -100,7 +111,7 @@ spotless {
 }
 
 group = "com.github.tjni.captainhook"
-version = "0.1.0"
+version = "0.1.1"
 
 publishing {
     publications {
@@ -130,7 +141,7 @@ publishing {
                 scm {
                     connection.set("scm:git:git://github.com/tjni/captain-hook.git")
                     developerConnection.set("scm:git:ssh://github.com/tjni/captain-hook.git")
-                    url.set("https://github.com/tjni/captain-hook");
+                    url.set("https://github.com/tjni/captain-hook")
                 }
             }
         }
