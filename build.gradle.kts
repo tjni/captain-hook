@@ -1,3 +1,4 @@
+import com.github.tjni.captainhook.CaptainHookExtension
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
@@ -7,6 +8,16 @@ plugins {
     signing
     kotlin("jvm") version "1.3.61"
     id("com.diffplug.gradle.spotless") version "3.27.0"
+}
+
+buildscript {
+    dependencies {
+        classpath("com.github.tjni.captainhook:captain-hook:0.1.0")
+    }
+}
+
+apply {
+    plugin("com.github.tjni.captainhook")
 }
 
 val functionalTestSourceSet = sourceSets.create("functionalTest") {
@@ -102,6 +113,10 @@ tasks.withType(Test::class) {
         showExceptions = true
         showStackTraces = true
     }
+}
+
+configure<CaptainHookExtension> {
+    preCommit.set("./gradlew staging spotlessApply -s")
 }
 
 spotless {

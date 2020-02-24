@@ -77,7 +77,7 @@ final class GitHelperTest {
   }
 
   @Test
-  void getStatus_ShouldParseIntoGitStatusLines() {
+  void status_ShouldParseIntoGitStatusLines() {
     // Given:
     List<String> statusOutput = Arrays.asList(" M file1", "AM file2", "?? file3");
 
@@ -96,7 +96,44 @@ final class GitHelperTest {
   }
 
   @Test
-  void getLsFiles_ShouldReturnAbsolutePaths() {
-    // TODO
+  void status_ShouldHandleEmptyStatus() {
+    // Given:
+    given(execHelper.exec("git", "status", "--porcelain")).willReturn("");
+
+    // When:
+    List<GitStatusLine> statusLines = gitHelper.status().getStatusLines();
+
+    // Then:
+    assertThat(statusLines).isEmpty();
+  }
+
+  @Test
+  void lsFiles_ShouldReturnAbsolutePaths() {
+    // Given:
+    given(execHelper.exec("git", "rev-parse", "--show-toplevel"))
+        .willReturn(GIT_TOP_LEVEL_DIR.toString());
+
+    List<String> lsFilesOutput = Arrays.asList("file1", "file2");
+
+    given(execHelper.exec("git", "ls-files")).willReturn(String.join("\n", lsFilesOutput));
+
+    // When:
+    List<Path> lsFiles = gitHelper.lsFiles();
+
+    // Then:
+    assertThat(lsFiles)
+        .containsExactly(GIT_TOP_LEVEL_DIR.resolve("file1"), GIT_TOP_LEVEL_DIR.resolve("file2"));
+  }
+
+  @Test
+  void lsFiles_ShouldHandleEmptyFileList() {
+    // Given:
+    given(execHelper.exec("git", "ls-files")).willReturn("");
+
+    // When:
+    List<Path> lsFiles = gitHelper.lsFiles();
+
+    // Then:
+    assertThat(lsFiles).isEmpty();
   }
 }

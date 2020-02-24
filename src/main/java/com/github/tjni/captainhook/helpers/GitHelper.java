@@ -84,8 +84,13 @@ public class GitHelper {
   GitStatus status(String... options) {
     String[] args = StreamEx.of("--porcelain").append(options).toArray(String.class);
     String output = git("status", args);
-    List<GitStatusLine> statusLines =
-        StreamEx.of(output.split("\n")).<GitStatusLine>map(ImmutableGitStatusLine::of).toList();
+    List<GitStatusLine> statusLines;
+    if (output.isEmpty()) {
+      statusLines = Collections.emptyList();
+    } else {
+      statusLines =
+          StreamEx.of(output.split("\n")).<GitStatusLine>map(ImmutableGitStatusLine::of).toList();
+    }
     return ImmutableGitStatus.of(statusLines);
   }
 

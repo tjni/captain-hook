@@ -282,6 +282,45 @@ final class StagingFunctionalTest {
     assertSnapshotDeleted(repository);
   }
 
+  @Test
+  void staging_WhenStagingTaskUndoesModifications_ShouldReturnEmptyStatus(@TempDir Path tempDir) {
+    // Given:
+    GitRepository repository = new GitRepository(tempDir);
+
+    repository.commitBuild(
+        APPLY_PLUGIN_SNIPPET,
+        "                                                ",
+        "tasks.register(\"unmodify\") {                    ",
+        "  doLast {                                      ",
+        "    file(\"file1.txt\").writeText(\"\")         ",
+        "  }                                             ",
+        "}                                               ");
+
+    repository.commitEmptyFiles("file%d.txt", 1);
+
+    repository.writeFile("file1.txt", "modified");
+    repository.git("add", "file1.txt");
+
+    // When:
+    BuildResult buildResult =
+        GradleRunner.create()
+            .withProjectDir(tempDir.toFile())
+            .withArguments("staging", "unmodify", "-s")
+            .withPluginClasspath()
+            .withDebug(true)
+            .build();
+
+    // Then:
+    assertThat(Objects.requireNonNull(buildResult.task(":unmodify")).getOutcome())
+        .isEqualTo(TaskOutcome.SUCCESS);
+
+    GitStatus status = repository.status();
+
+    assertThat(status.isEmpty()).isTrue();
+
+    assertSnapshotDeleted(repository);
+  }
+
   private static void assertSnapshotDeleted(GitRepository repository) {
     assertThat(repository.git("stash", "list")).as("git stash list").isEmpty();
   }
