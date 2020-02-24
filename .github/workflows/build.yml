@@ -14,10 +14,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       
-    - name: Set up Java ${{ matrix.java }
+    - name: Set up Java ${{ matrix.java }}
       uses: actions/setup-java@v1
       with:
-        java-version: ${{ matrix.java }
+        java-version: ${{ matrix.java }}
 
     - uses: actions/cache@v1
       with:
@@ -34,9 +34,8 @@ jobs:
     - name: Publish
       run: ./gradlew publish
       env:
-        ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.signingKeyId }} 
-        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.signingPassword }}
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.signingKey }}
+        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.signingPassword }}
         ORG_GRADLE_PROJECT_nexusUsername: ${{ secrets.nexusUsername }}
         ORG_GRADLE_PROJECT_nexusPassword: ${{ secrets.nexusPassword }}
       
