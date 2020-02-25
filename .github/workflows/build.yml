@@ -1,6 +1,6 @@
 name: build
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -20,6 +20,7 @@ jobs:
         java-version: ${{ matrix.java }}
 
     - uses: actions/cache@v1
+      if: matrix.os != 'macos-latest'
       with:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('dependencies.gradle.kts') }}
@@ -30,13 +31,3 @@ jobs:
       
     - name: Build
       run: ./gradlew build
-
-    - name: Publish
-      if: matrix.os == 'macos-latest' && matrix.java == 13
-      run: ./gradlew publish
-      env:
-        ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.signingKeyId }}
-        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.signingKey }}
-        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.signingPassword }}
-        ORG_GRADLE_PROJECT_nexusUsername: ${{ secrets.nexusUsername }}
-        ORG_GRADLE_PROJECT_nexusPassword: ${{ secrets.nexusPassword }}
