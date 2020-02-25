@@ -15,7 +15,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.github.tjni.captainhook:captain-hook:0.1.0'
+    classpath 'com.github.tjni.captainhook:captain-hook:0.1.2'
   }
 }
 
