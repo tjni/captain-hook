@@ -10,7 +10,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 public class CaptainHookPlugin implements Plugin<Project> {
-  @VisibleForTesting static final String PLUGIN_ID = "com.github.tjni.captain-hook";
+  @VisibleForTesting static final String PLUGIN_ID = "com.github.tjni.captainhook";
 
   @Override
   public void apply(Project project) {
