@@ -1,6 +1,6 @@
 # Captain Hook
 
-![build](https://github.com/tjni/captain-hook/workflows/build/badge.svg)
+![build](https://github.com/tjni/captain-hook/workflows/build/badge.svg) [![Maintainability](https://api.codeclimate.com/v1/badges/3104b18fd08478b7c623/maintainability)](https://codeclimate.com/github/tjni/captain-hook/maintainability)
 
 Gradle plugin for installing Git hooks.
 
