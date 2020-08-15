@@ -1,6 +1,7 @@
 # Captain Hook
 
-![build](https://github.com/tjni/captain-hook/workflows/build/badge.svg) [![Maintainability](https://api.codeclimate.com/v1/badges/3104b18fd08478b7c623/maintainability)](https://codeclimate.com/github/tjni/captain-hook/maintainability)
+![build](https://github.com/tjni/captain-hook/workflows/build/badge.svg) [![Maintainability](https://api.codeclimate.com/v1/badges/3104b18fd08478b7c623/maintainability)](https://codeclimate.com/github/tjni/captain-hook/maintainability) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.tjni.captainhook/captain-hook/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.tjni.captainhook/captain-hook)
+
 
 Gradle plugin for installing Git hooks.
 
@@ -15,7 +16,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.github.tjni.captainhook:captain-hook:0.1.2'
+    classpath 'com.github.tjni.captainhook:captain-hook:0.1.3'
   }
 }
 
