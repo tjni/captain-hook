@@ -62,7 +62,7 @@ final class StagingFunctionalTest {
   }
 
   @Test
-  void staging_WhenStagingIsEmpty_ShouldSkipAllTasks(@TempDir Path tempDir) {
+  void staging_WhenStagingIsEmpty_ShouldExcludeAllTasks(@TempDir Path tempDir) {
     // Given:
     GitRepository repository = new GitRepository(tempDir);
 
@@ -89,18 +89,9 @@ final class StagingFunctionalTest {
             .build();
 
     // Then:
-    assertThat(Objects.requireNonNull(buildResult.task(":greeting")).getOutcome())
-        .isEqualTo(TaskOutcome.SKIPPED);
-
-    assertThat(Objects.requireNonNull(buildResult.task(":goodbye")).getOutcome())
-        .isEqualTo(TaskOutcome.SKIPPED);
-
-    assertThat(Objects.requireNonNull(buildResult.task(":staging")).getOutcome())
-        .isEqualTo(TaskOutcome.SKIPPED);
-
-    assertThat(buildResult.getTasks())
-        .extracting(BuildTask::getPath)
-        .containsSubsequence(":staging", ":greeting", ":goodbye");
+    assertThat(buildResult.task(":greeting")).isNull();
+    assertThat(buildResult.task(":goodbye")).isNull();
+    assertThat(buildResult.task(":staging")).isNull();
   }
 
   @Test

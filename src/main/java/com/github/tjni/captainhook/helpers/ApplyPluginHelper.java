@@ -5,18 +5,14 @@ import com.github.tjni.captainhook.dagger.components.PluginComponent;
 import com.github.tjni.captainhook.helpers.StagingHelper.Snapshot;
 import com.github.tjni.captainhook.tasks.ApplyGitHooksTask;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import one.util.streamex.EntryStream;
 import org.gradle.BuildResult;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.provider.Provider;
-import org.gradle.api.tasks.TaskCollection;
 import org.gradle.api.tasks.TaskContainer;
 
 public class ApplyPluginHelper {
@@ -46,8 +42,8 @@ public class ApplyPluginHelper {
     if (!startTaskNames.isEmpty() && startTaskNames.get(0).equals(STAGING_TASK_NAME)) {
       createStagingRootTask();
       if (component.getStagingHelper().isStagingEmpty()) {
-        LOG.warn("Skipping running tasks on staged files because the staging area is empty.");
-        disableTasks(new HashSet<>(startTaskNames));
+        LOG.warn("Not running any tasks because the staging area is empty.");
+        project.getGradle().getStartParameter().setExcludedTaskNames(startTaskNames);
       } else {
         Snapshot snapshot = component.getStagingHelper().saveSnapshot();
         project.getExtensions().getExtraProperties().set("staging", snapshot.getStagedFiles());
@@ -144,10 +140,6 @@ public class ApplyPluginHelper {
     tasks.register(STAGING_TASK_NAME);
   }
 
-  private void disableTasks(Set<String> tasks) {
-    findLazyTasks(tasks).all(task -> task.setEnabled(false));
-  }
-
   private void handleStagingBuildFinished(BuildResult buildResult, Snapshot snapshot) {
     if (buildResult.getFailure() == null) {
       try {
@@ -161,9 +153,5 @@ public class ApplyPluginHelper {
     }
 
     component.getStagingHelper().deleteSnapshot(snapshot);
-  }
-
-  private TaskCollection<Task> findLazyTasks(Set<String> stagingTaskNames) {
-    return tasks.matching(task -> stagingTaskNames.contains(task.getName()));
   }
 }

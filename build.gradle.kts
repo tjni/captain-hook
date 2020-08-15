@@ -7,7 +7,7 @@ plugins {
     `maven-publish`
     signing
     kotlin("jvm") version "1.3.61"
-    id("com.diffplug.gradle.spotless") version "3.27.0"
+    id("com.diffplug.spotless") version "5.1.1"
 }
 
 buildscript {
@@ -126,7 +126,7 @@ spotless {
 }
 
 group = "com.github.tjni.captainhook"
-version = "0.1.2"
+version = "0.1.3"
 
 publishing {
     publications {
