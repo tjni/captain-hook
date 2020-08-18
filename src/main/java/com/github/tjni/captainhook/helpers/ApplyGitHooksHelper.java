@@ -6,6 +6,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -133,13 +134,17 @@ public class ApplyGitHooksHelper {
     return getGitHookScriptsDirectory(gitHooksDir).resolve(gitHook.getHookName());
   }
 
+  private static String getGitHookCommand(Path gitHooksDir, GitHook gitHook) {
+    Path gitHookScriptFile = gitHooksDir.relativize(getGitHookScriptFile(gitHooksDir, gitHook));
+    return "`dirname \"$0\"`" + File.separatorChar + gitHookScriptFile;
+  }
+
   private Path addGitHook(Path gitHooksDir, GitHook gitHook) {
     Path gitHookFile = gitHooksDir.resolve(gitHook.getHookName());
     String currentHookString =
         filesHelper.exists(gitHookFile) ? filesHelper.toString(gitHookFile).trim() : "#!/bin/sh -";
 
-    Path gitHookScriptFile = getGitHookScriptFile(gitHooksDir, gitHook);
-    String executeCommand = String.format("%n%n%s", gitHookScriptFile);
+    String executeCommand = String.format("%n%n%s", getGitHookCommand(gitHooksDir, gitHook));
 
     if (currentHookString.contains(executeCommand)) {
       return gitHookFile;
@@ -158,8 +163,7 @@ public class ApplyGitHooksHelper {
 
     String currentHookString = filesHelper.toString(gitHookFile).trim();
 
-    Path gitHookScriptFile = getGitHookScriptFile(gitHooksDir, gitHook);
-    String executeCommand = String.format("%n%n%s", gitHookScriptFile);
+    String executeCommand = String.format("%n%n%s", getGitHookCommand(gitHooksDir, gitHook));
 
     if (!currentHookString.contains(executeCommand)) {
       return Optional.of(gitHookFile);

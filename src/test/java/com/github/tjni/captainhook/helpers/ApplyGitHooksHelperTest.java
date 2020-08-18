@@ -120,7 +120,7 @@ final class ApplyGitHooksHelperTest {
     // Then:
     String expectedHookString =
         String.format(
-            "#!/bin/sh -%n%n%s", GIT_HOOK_SCRIPTS_DIR.resolve(GitHook.PRE_COMMIT.getHookName()));
+            "#!/bin/sh -%n%n`dirname \"$0\"`/git-hooks/%s", GitHook.PRE_COMMIT.getHookName());
     verify(filesHelper).write(gitHookFile, expectedHookString);
     verify(filesHelper).setPosixFilePermissions(gitHookFile, "rwxr--r--");
   }
@@ -144,8 +144,8 @@ final class ApplyGitHooksHelperTest {
     // Then:
     String expectedHookString =
         String.format(
-            "%s%n%n%s",
-            currentHookString, GIT_HOOK_SCRIPTS_DIR.resolve(GitHook.PRE_COMMIT.getHookName()));
+            "%s%n%n%s%s",
+            currentHookString, "`dirname \"$0\"`/git-hooks/", GitHook.PRE_COMMIT.getHookName());
     verify(filesHelper).write(gitHookFile, expectedHookString);
     verify(filesHelper).setPosixFilePermissions(gitHookFile, "rwxr--r--");
   }
@@ -160,7 +160,7 @@ final class ApplyGitHooksHelperTest {
 
     String existingHookString =
         String.format(
-            "#!/bin/sh -%n%n%s", GIT_HOOK_SCRIPTS_DIR.resolve(GitHook.PRE_COMMIT.getHookName()));
+            "#!/bin/sh -%n%n`dirname \"$0\"`/git-hooks/%s", GitHook.PRE_COMMIT.getHookName());
 
     given(filesHelper.exists(gitHookFile)).willReturn(true);
     given(filesHelper.toString(gitHookFile)).willReturn(existingHookString);
@@ -188,15 +188,17 @@ final class ApplyGitHooksHelperTest {
     given(filesHelper.toString(preCommitFile))
         .willReturn(
             String.format(
-                "%s%n%n%s",
+                "%s%n%n%s%s",
                 leftoverHookString,
-                GIT_HOOK_SCRIPTS_DIR.resolve(GitHook.PRE_COMMIT.getHookName())));
+                "`dirname \"$0\"`/git-hooks/",
+                GitHook.PRE_COMMIT.getHookName()));
     given(filesHelper.toString(preRebaseFile))
         .willReturn(
             String.format(
-                "%s%n%n%s",
+                "%s%n%n%s%s",
                 leftoverHookString,
-                GIT_HOOK_SCRIPTS_DIR.resolve(GitHook.PRE_REBASE.getHookName())));
+                "`dirname \"$0\"`/git-hooks/",
+                GitHook.PRE_REBASE.getHookName()));
 
     // When:
     applyGitHooksHelper.applyHooks(GIT_HOOKS_DIR, gitHooks);
@@ -223,15 +225,17 @@ final class ApplyGitHooksHelperTest {
     given(filesHelper.toString(preCommitFile))
         .willReturn(
             String.format(
-                "%s%n%n%s",
+                "%s%n%n%s%s",
                 leftoverHookString,
-                GIT_HOOK_SCRIPTS_DIR.resolve(GitHook.PRE_COMMIT.getHookName())));
+                "`dirname \"$0\"`/git-hooks/",
+                GitHook.PRE_COMMIT.getHookName()));
     given(filesHelper.toString(preRebaseFile))
         .willReturn(
             String.format(
-                "%s%n%n%s",
+                "%s%n%n%s%s",
                 leftoverHookString,
-                GIT_HOOK_SCRIPTS_DIR.resolve(GitHook.PRE_REBASE.getHookName())));
+                "`dirname \"$0\"`/git-hooks/",
+                GitHook.PRE_REBASE.getHookName()));
     given(filesHelper.write(any(), any())).will(returnsFirstArg());
 
     // When:
