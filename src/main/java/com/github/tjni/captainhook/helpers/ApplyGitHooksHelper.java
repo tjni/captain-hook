@@ -136,7 +136,7 @@ public class ApplyGitHooksHelper {
 
   private static String getGitHookCommand(Path gitHooksDir, GitHook gitHook) {
     Path gitHookScriptFile = gitHooksDir.relativize(getGitHookScriptFile(gitHooksDir, gitHook));
-    return "`dirname \"$0\"`" + File.separatorChar + gitHookScriptFile;
+    return "`dirname \"$0\"`" + "/" + gitHookScriptFile;
   }
 
   private Path addGitHook(Path gitHooksDir, GitHook gitHook) {
